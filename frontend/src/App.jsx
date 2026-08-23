@@ -25,18 +25,23 @@ function App() {
     const [editExpirationDate, setEditExpirationDate] = useState("");
 
     const updateFood = () => {
-        fetch(`http://localhost:8080/foods/${encodeURIComponent(selectedFood.name)}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                category: editCategory,
-                quantity: Number(editQuantity),
-                expirationDate: editExpirationDate,
-            }),
-        })
+        fetch(
+            `http://localhost:8080/foods/${encodeURIComponent(
+                selectedFood.name
+            )}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    category: editCategory,
+                    quantity: Number(editQuantity),
+                    expirationDate: editExpirationDate,
+                }),
+            }
+        )
             .then((response) => response.json())
             .then((data) => {
                 setSelectedFood(data);
@@ -69,12 +74,11 @@ function App() {
     };
 
     const createFood = () => {
-
-        console.log("送信する賞味期限:", expirationDate);
-
         fetch("http://localhost:8080/foods", {
             method: "POST",
-            headers: { "Content-Type": "application/json", },
+            headers: {
+                "Content-Type": "application/json",
+            },
             credentials: "include",
             body: JSON.stringify({
                 name: name,
@@ -84,16 +88,13 @@ function App() {
             }),
         })
             .then((response) => {
-                console.log("登録ステータス:", response.status);
-
                 if (!response.ok) {
                     throw new Error(`登録失敗: ${response.status}`);
                 }
 
                 return response.json();
             })
-            .then((data) => { console.log("登録結果:", data);
-
+            .then((data) => {
                 setFoods([...foods, data]);
                 setPage("foods");
             })
@@ -108,9 +109,6 @@ function App() {
             credentials: "include",
         })
             .then((response) => {
-                console.log("logout status:", response.status);
-                console.log("logout ok:", response.ok);
-
                 if (response.ok) {
                     setLoggedIn(false);
                     setPage("top");
@@ -136,12 +134,11 @@ function App() {
             body: params,
         })
             .then((response) => {
-                console.log("login status:", response.status);
-                console.log("login ok:", response.ok);
-
                 if (response.ok) {
                     setLoggedIn(true);
                     setPage("top");
+                } else {
+                    alert("ログインIDまたはパスワードが正しくありません");
                 }
             });
     };
@@ -232,4 +229,5 @@ function App() {
 
     return null;
 }
+
 export default App;

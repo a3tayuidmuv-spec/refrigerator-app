@@ -1,2 +1,4 @@
 .DS_Store
 .idea/*.mv.db
+.idea/
+data/

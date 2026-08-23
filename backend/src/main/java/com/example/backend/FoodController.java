@@ -59,6 +59,18 @@ public class FoodController {
         System.out.println("受信した数量：" + food.getQuantity());
         System.out.println("受信した賞味期限：" + food.getExpirationDate());
 
+        if (food.getName() == null || food.getName().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (food.getQuantity() == null || food.getQuantity() <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (food.getExpirationDate() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Food savedFood = foodService.save(food);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFood);
@@ -71,7 +83,8 @@ public class FoodController {
     }
 
     @DeleteMapping
-    public void deleteFood(@RequestParam String name) {
+    public ResponseEntity<String> deleteFood(@RequestParam String name) {
         foodService.deleteByName(name);
+        return ResponseEntity.ok("削除しました");
     }
 }
